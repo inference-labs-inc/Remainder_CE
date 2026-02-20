@@ -146,12 +146,14 @@ impl<N: Hash + Eq + Clone + Debug> Graph<N> {
     /// termination via DFS. However, since we wish to order from sources ->
     /// sinks, and our dependency graph is structured as children -> parent, we
     /// do not reverse the termination order of the DFS search.
-    fn topo_sort(&self) -> Result<Vec<N>> {
+    fn topo_sort(&self) -> Result<Vec<N>> where N: Ord {
         let mut terminated_nodes: HashSet<N> = HashSet::new();
         let mut topological_order: Vec<N> = Vec::with_capacity(self.repr.len());
         let mut exploring_nodes: HashSet<N> = HashSet::new();
 
-        for node in self.repr.keys() {
+        let mut keys: Vec<&N> = self.repr.keys().collect();
+        keys.sort();
+        for node in keys {
             self.visit_node_dfs(
                 node,
                 &mut exploring_nodes,
