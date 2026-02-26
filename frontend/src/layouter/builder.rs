@@ -38,6 +38,7 @@ use crate::{
     },
 };
 use remainder::{
+    circuit_building_context::CircuitBuildingContext,
     circuit_layout::CircuitLocation,
     input_layer::{ligero_input_layer::LigeroInputLayerDescription, InputLayerDescription},
     layer::{gate::BinaryOperation, layer_enum::LayerDescriptionEnum, LayerId},
@@ -236,7 +237,13 @@ pub struct CircuitBuilder<F: Field> {
 
 impl<F: Field> CircuitBuilder<F> {
     /// Constructs an empty [CircuitBuilder].
+    ///
+    /// Resets the global ID counters so that LayerIds are assigned
+    /// deterministically from zero. This is required for circuit description
+    /// hash reproducibility: the prover and verifier must independently
+    /// construct the same circuit and arrive at the same hash.
     pub fn new() -> Self {
+        CircuitBuildingContext::reset();
         Self {
             input_layer_nodes: vec![],
             input_shred_nodes: vec![],
