@@ -730,12 +730,12 @@ pub(crate) fn fold_binary_gate_wiring_into_mles_phase_1<F: Field>(
             |(_, mut a_hg_lhs_acc, mut a_hg_rhs_acc), (_, a_hg_lhs_partial, a_hg_rhs_partial)| {
                 a_hg_lhs_acc
                     .iter_mut()
-                    .zip(a_hg_lhs_partial.into_iter())
+                    .zip(a_hg_lhs_partial)
                     .for_each(|(acc, partial)| *acc += partial);
 
                 a_hg_rhs_acc
                     .iter_mut()
-                    .zip(a_hg_rhs_partial.into_iter())
+                    .zip(a_hg_rhs_partial)
                     .for_each(|(acc, partial)| *acc += partial);
 
                 (None, a_hg_lhs_acc, a_hg_rhs_acc)
@@ -883,12 +883,12 @@ pub(crate) fn fold_binary_gate_wiring_into_mles_phase_2<F: Field>(
             |(_, mut a_f1_lhs_acc, mut a_f1_rhs_acc), (_, a_f1_lhs_partial, a_f1_rhs_partial)| {
                 a_f1_lhs_acc
                     .iter_mut()
-                    .zip(a_f1_lhs_partial.into_iter())
+                    .zip(a_f1_lhs_partial)
                     .for_each(|(acc, partial)| *acc += partial);
 
                 a_f1_rhs_acc
                     .iter_mut()
-                    .zip(a_f1_rhs_partial.into_iter())
+                    .zip(a_f1_rhs_partial)
                     .for_each(|(acc, partial)| *acc += partial);
 
                 ((None, None), a_f1_lhs_acc, a_f1_rhs_acc)

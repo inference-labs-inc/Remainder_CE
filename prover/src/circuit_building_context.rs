@@ -12,7 +12,7 @@
 //! [`CircuitBuilder::new()`] call, guaranteeing deterministic assignment
 //! within each build.
 
-use std::cell::Cell;
+use std::{cell::Cell, thread::LocalKey};
 
 thread_local! {
     static NODE_ID: Cell<usize> = const { Cell::new(0) };
@@ -36,35 +36,31 @@ impl CircuitBuildingContext {
         FIAT_SHAMIR_CHALLENGE_LAYER_ID.set(0);
     }
 
+    /// Returns the next node ID for the current thread.
     pub fn next_node_id() -> usize {
-        NODE_ID.with(|c| {
-            let v = c.get();
-            c.set(v + 1);
-            v
-        })
+        next(&NODE_ID)
     }
 
+    /// Returns the next input layer ID for the current thread.
     pub fn next_input_layer_id() -> usize {
-        INPUT_LAYER_ID.with(|c| {
-            let v = c.get();
-            c.set(v + 1);
-            v
-        })
+        next(&INPUT_LAYER_ID)
     }
 
+    /// Returns the next layer ID for the current thread.
     pub fn next_layer_id() -> usize {
-        LAYER_ID.with(|c| {
-            let v = c.get();
-            c.set(v + 1);
-            v
-        })
+        next(&LAYER_ID)
     }
 
+    /// Returns the next Fiat-Shamir challenge layer ID for the current thread.
     pub fn next_fiat_shamir_challenge_layer_id() -> usize {
-        FIAT_SHAMIR_CHALLENGE_LAYER_ID.with(|c| {
-            let v = c.get();
-            c.set(v + 1);
-            v
-        })
+        next(&FIAT_SHAMIR_CHALLENGE_LAYER_ID)
     }
+}
+
+fn next(counter: &'static LocalKey<Cell<usize>>) -> usize {
+    counter.with(|c| {
+        let v = c.get();
+        c.set(v + 1);
+        v
+    })
 }
