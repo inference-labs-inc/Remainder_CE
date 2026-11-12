@@ -21,7 +21,6 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 num = "0.4.1"
 ndarray = { version = "0.15.6", features = ["serde"] }
-ndarray-npy = "0.8.1"
 tracing-subscriber = "0.3.17"
 ligero = { path = "../ligero" }
 shared-types = { path = "../shared_types" }
